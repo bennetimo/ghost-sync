@@ -9,8 +9,15 @@ RUN \
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# -----------------------
+# Default configuration
+# ----------------------- 
+
+# -----------------------
+
 # Add the sync script
 COPY sync.sh /bin/sync
 RUN chmod +x /bin/sync
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/sync"]
+CMD ["-di"]
