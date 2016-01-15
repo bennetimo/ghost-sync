@@ -17,7 +17,7 @@ For example:
 
 Where:
 
- * `<your-data-container>` is where your ghost themes live (your Ghost container or separate data container)
+ * `<your-data-container>` is where your ghost content lives (your Ghost container or separate data container)
  * `<privatekey>` is the ssh key to connect with your remote host
  * `<host>`: The remote host to sync with
  * `<user>`: The ssh user for the sync
