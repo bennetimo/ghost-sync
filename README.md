@@ -47,7 +47,7 @@ For example, to sync the images and database you would use the flags `-id` when 
 
 You need to link in the ghost-backup container, and its volumes
 
-`docker run -it --rm --link ghost-backup:backup --volumes-from ghost-backup-container --volumes-from your-data-container -v ~/.ssh/yourprivatekey:~/.ssh/id_rsa -v /var/run/docker.sock:/var/run/docker.sock:ro -e SYNC_HOST=178.62.43.109 -e SYNC_USER=tim -e SYNC_LOCATION=/sync/upandultra.com bennetimo/ghost-sync -d`
+`docker run -it --rm --link ghost-backup:backup --volumes-from ghost-backup-container --volumes-from your-data-container -v ~/.ssh/yourprivatekey:~/.ssh/id_rsa -v /var/run/docker.sock:/var/run/docker.sock:ro -e SYNC_HOST=host -e SYNC_USER=user -e SYNC_LOCATION=location bennetimo/ghost-sync -d`
 
 > Note the -d flag specified, and the mounting of the docker socket. This is so ghost-sync can execute the ghost-backup container.
 
