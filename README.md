@@ -43,7 +43,7 @@ By default only the images will be synced, as the docker cmd starts with the `-i
 For example, to sync the images and database you would use the flags `-id` when starting the container above. 
 
 ### Syncing the database
-[bennetimo/ghost-backup](https://github.com/bennetimo/ghost-backup) is a container that can take an online backup of the ghost database. If setup, you can use it for an online database sync. 
+[bennetimo/ghost-backup](https://github.com/bennetimo/ghost-backup) is a container that can take an online backup of the ghost database. If setup, you can use it for an online database sync. It needs to be setup on the local and remote environments.
 
 You need to link in the ghost-backup container, and its volumes
 
