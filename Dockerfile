@@ -12,6 +12,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 # -----------------------
 # Default configuration
 # ----------------------- 
+# Location to sync local files to on the remote host          
+ENV SYNC_LOCATION /sync/ 
 
 # -----------------------
 

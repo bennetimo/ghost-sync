@@ -14,6 +14,18 @@ apps=false
 themes=false
 sync_dirs=""
 
+GHOST_LOC=
+if [ -n "$BACKUP_ENV_GHOST_LOCATION" ]; then 
+	# Backup container is linked
+	GHOST_LOC=$BACKUP_ENV_GHOST_LOCATION
+elif [ -n "$GHOST_LOCATION" ]; then
+	GHOST_LOC=$GHOST_LOCATION
+else
+	GHOST_LOC="/var/lib/ghost"
+fi
+	
+echo "using ghost files from $GHOST_LOC"
+
 syncDatabase () {
 	# Test the env that is set if a ghost-backup container is linked
 	if [ -z "$BACKUP_NAME" ]; then 
@@ -35,7 +47,12 @@ syncDatabase () {
 			[[ $file -nt $latest_db  && $file =~ .*db* ]] && latest_db=$file
 		done
 
-		echo "copying db file to $SYNC_HOST:$SYNC_LOCATION"
+		if [ -z "$latest_db" ]; then 
+			echo "Error: Could not access the just created DB snapshot. Have you included the ghost-backup container volumes with --volumes-from?"; 
+			echo "Finished: FAILURE"; exit 1
+		fi
+
+		echo "copying db file '$latest_db' to $SYNC_HOST:$SYNC_LOCATION"
     	scp $latest_db $SYNC_USER@$SYNC_HOST:$SYNC_LOCATION/sync.db.gz
 
 		echo "updating database"
@@ -51,9 +68,9 @@ syncFiles () {
 while getopts "diat" opt; do
   case $opt in
     d) database=true ;;
-	i) images=true; sync_dirs="$sync_dirs $BACKUP_ENV_GHOST_LOCATION/images" ;;
-	a) apps=true; sync_dirs="$sync_dirs $BACKUP_ENV_GHOST_LOCATION/apps" ;;
-	t) themes=true; sync_dirs="$sync_dirs $BACKUP_ENV_GHOST_LOCATION/themes" ;;
+	i) images=true; sync_dirs="$sync_dirs $GHOST_LOC/images" ;;
+	a) apps=true; sync_dirs="$sync_dirs $GHOST_LOC/apps" ;;
+	t) themes=true; sync_dirs="$sync_dirs $GHOST_LOC/themes" ;;
     \?) usage; exit 0 ;;
   esac
 done
@@ -69,7 +86,7 @@ read -p "Confirm sync y/n: " -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 	if [ $database = true ]; then syncDatabase; fi
-	if [ -n $sync_dirs ]; then syncFiles; fi
+	if [ -n "$sync_dirs" ]; then syncFiles; fi
 	
 	echo "sync complete"
 else
